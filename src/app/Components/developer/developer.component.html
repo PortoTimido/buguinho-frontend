@@ -1,0 +1,180 @@
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <h2 class="text-center fw-bold text-body-emphasis">Lista de desenvolvedores</h2>
+
+    <div class="row mt-5 mb-5 align-items-center">
+        <div class="col-3">
+            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterDevelopers()" placeholder="Buscar..." class="form-control">
+        </div>
+        <div class="col-3">
+            <select [(ngModel)]="selectedCargo" class="form-select">
+                <option value="">Selecione um cargo</option>
+                <option value="Desenvolvedor_FrontEnd">Desenvolvedor FrontEnd</option>
+                <option value="Desenvolvedor_BackEnd">Desenvolvedor BackEnd</option>
+                <option value="Testador">Testador</option>
+                <option value="Dba">DBA</option>
+            </select>
+        </div>
+        <div class="col d-flex justify-content-md-end">
+            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#DevModal" (click)="clear()">
+                + Novo desenvolvedor
+            </button>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Desenvolvedor</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Cargo</th>
+                <th scope="col">Alterar</th>
+                <th scope="col">Remover</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let d of filteredDevelopers">
+                <th scope="row">{{d.nome}}</th>
+                <td>{{d.email}}</td>
+                <td>{{d.cargo}}</td>
+                <td>
+                    <button class="btn btn-danger" (click)="delete(d)">
+                        Remover
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#UpdateModal" (click)="onClickUpdate(d)">
+                        Alterar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal de inserção -->
+<div class="modal fade" id="DevModal" tabindex="-1" aria-labelledby="DevModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-4 text-muted bg-body border border-dashed rounded-5">
+            <button
+                type="button"
+                class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+                data-bs-dismiss="modal"
+                aria-label="Close">
+            </button>
+            <h1 class="fw-bold text-body-emphasis mb-4 text-center">Cadastre o desenvolvedor!</h1>
+
+            <div class="row">
+                <div class="col-7 m-auto">
+                    
+                    <div *ngIf="mensagem" class="alert alert-success mt-5 text-center fw-bold">
+                        {{ mensagem }}
+                    </div>
+                    <div *ngIf="mensagemError" class="alert alert-danger mt-5 text-center fw-bold">
+                        {{ mensagemError }}
+                    </div>
+                    <form [formGroup]="formGroupDeveloper" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="mb-3 col-12">
+                                <label for="inputName" class="form-label fw-bold">Nome</label>
+                                <input formControlName="nome" type="text" class="form-control" id="inputName" aria-describedby="nameHelp" required
+                                    [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('nome')?.invalid}">
+                                <div *ngIf="submitted && formGroupDeveloper.get('nome')?.invalid" class="invalid-feedback">
+                                    Nome é obrigatório.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-12">
+                                <label for="email" class="form-label fw-bold">E-mail</label>
+                                <input formControlName="email" type="email" class="form-control" id="email" placeholder="you@example.com" aria-describedby="emailHelp" required
+                                    [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('email')?.invalid}">
+                                <div *ngIf="submitted && formGroupDeveloper.get('email')?.invalid" class="invalid-feedback">
+                                    E-mail é obrigatório e deve ser válido.
+                                </div>
+                                <div id="emailHelp" class="form-text"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-12">
+                                <label for="cargo" class="form-label fw-bold">Cargo</label>
+                                <select formControlName="cargo" class="form-select" id="cargo" required
+                                    [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('cargo')?.invalid}">
+                                    <option value="">Selecione um cargo</option>
+                                    <option value="Desenvolvedor_FrontEnd">Desenvolvedor FrontEnd</option>
+                                    <option value="Desenvolvedor_BackEnd">Desenvolvedor BackEnd</option>
+                                    <option value="Testador">Testador</option>
+                                    <option value="Dba">DBA</option>
+                                </select>
+                                <div *ngIf="submitted && formGroupDeveloper.get('cargo')?.invalid" class="invalid-feedback">
+                                    Cargo é obrigatório.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-danger col-3" (click)="clear()" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary col-3" type="button" (click)="save()">
+                                Salvar
+                            </button>
+                        </div>              
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de atualização -->
+<div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="UpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-4 text-muted bg-body border border-dashed rounded-5">
+            <button
+                type="button"
+                class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+                data-bs-dismiss="modal"
+                aria-label="Close">
+            </button>
+            <h1 class="text-body-emphasis mb-5 text-center">Alteração</h1>
+            <form [formGroup]="formGroupDeveloper" class="needs-validation" novalidate>
+                <div class="row col-7 m-auto" *ngIf="isEditing">
+                    <div class="mb-3">
+                        <label for="inputTitleEdit" class="form-label fw-bold">Nome</label>
+                        <input formControlName="nome" type="text" class="form-control" id="inputTitleEdit" aria-describedby="nomeHelp" required
+                            [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('nome')?.invalid}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailEdit" class="form-label fw-bold">E-mail</label>
+                        <input formControlName="email" type="email" class="form-control" id="emailEdit" required
+                            [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('email')?.invalid}">
+                        <div *ngIf="submitted && formGroupDeveloper.get('email')?.invalid" class="invalid-feedback">
+                            E-mail é obrigatório e deve ser válido.
+                        </div>
+                    </div>
+                    <div class="mb-3 col-12">
+                        <label for="cargoEdit" class="form-label fw-bold">Cargo</label>
+                        <select formControlName="cargo" class="form-select" id="cargoEdit" required
+                            [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('cargo')?.invalid}">
+                            <option value="">Selecione um cargo</option>
+                            <option value="Desenvolvedor_FrontEnd">Desenvolvedor FrontEnd</option>
+                            <option value="Desenvolvedor_BackEnd">Desenvolvedor BackEnd</option>
+                            <option value="Testador">Testador</option>
+                            <option value="Dba">DBA</option>
+                        </select>
+                        <div *ngIf="submitted && formGroupDeveloper.get('cargo')?.invalid" class="invalid-feedback">
+                            Cargo é obrigatório.
+                        </div>
+                    </div>
+                    <div class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-danger col-3" (click)="clear()" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button class="btn btn-primary col-3" type="button" (click)="update()">
+                            Atualizar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
