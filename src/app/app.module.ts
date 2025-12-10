@@ -10,6 +10,7 @@ import { DeveloperComponent } from './Components/developer/developer.component';
 import { provideHttpClient } from '@angular/common/http';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BugsComponent } from './Components/bugs/bugs.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     SidebarComponent,
     AboutComponent,
-    DeveloperComponent
+    DeveloperComponent,
+    BugsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,295 @@
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <h2 class="text-center fw-bold text-body-emphasis">Lista de bugs</h2>
+
+    <div class="row mt-5 mb-5">
+            <div class="col-3">
+            <input type="text" [(ngModel)]="searchTerm" [ngModelOptions]="{ standalone: true }" (ngModelChange)="filterbugs()" placeholder="Buscar..." class="form-control">
+        </div>
+        <div class="col-3">
+            <select [(ngModel)]="selectedCategory" [ngModelOptions]="{ standalone: true }" (ngModelChange)="filterbugs()" class="form-select">
+                <option value="">Todos os desenvolvedores</option>
+                <option *ngFor="let dev of uniqueDevelopers" [value]="dev">{{dev}}</option>
+            </select>
+        </div>
+                <div class="col d-flex gap-2 justify-content-end">
+            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#BugModal">
+                + Novo Bug
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="mensagemError" class="alert alert-danger mt-5 text-center fw-bold">
+        {{ mensagemError }}
+    </div>
+
+    <!-- Modal de atualização -->
+    <div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="UpdateModal" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content p-5 text-center text-muted bg-body border border-dashed rounded-5">
+                <button
+                    type="button"
+                    class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+                <h1 class="text-body-emphasis mb-5">Alteração</h1>
+
+                <!-- FORMULÁRIO -->
+                <form [formGroup]="formGroupbug" class="needs-validation" novalidate>
+                    <div class="row" *ngIf="isEditing">
+                            <div class="mb-3 col-6">
+                            <label for="inputTitleEdit" class="form-label fw-bold">Título</label>
+                            <input formControlName="titulo" type="text" class="form-control" id="inputTitleEdit" aria-describedby="titleHelp" required
+                                [ngClass]="{'is-invalid': submitted && formGroupbug.get('titulo')?.invalid}">
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="projectEdit" class="form-label fw-bold">Projeto</label>
+                            <input formControlName="projeto" type="text" class="form-control" id="projectEdit">
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="mb-3 col-12">
+                            <label for="descriptionEdit" class="form-label fw-bold">Descrição</label>
+                            <input formControlName="descricao" type="text" class="form-control" id="descriptionEdit">
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="mb-3 col-4">
+                            <label for="typeEdit" class="form-label fw-bold">Tipo</label>
+                            <input formControlName="tipo" type="text" class="form-control" id="typeEdit">
+                        </div>
+                        <div class="mb-3 col-4">
+                                    <label for="date" class="form-label fw-bold">Data de identificação</label>
+                                    <input formControlName="dataIdentificacao" type="text" mask="00/00/0000" placeholder="__/__/____" class="form-control" id="date" aria-describedby="dateHelp">
+                        </div>
+                        <div class="mb-3 col-4">
+                            <label for="developerEdit" class="form-label fw-bold">Desenvolvedor</label>
+                            <select formControlName="desenvolvedorResponsavel" class="form-select" id="developerEdit">
+                                <option value="">Selecione</option>
+                                <option *ngFor="let dev of developers" [value]="dev.nome">{{dev.nome}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="mb-3 col-6">
+                            <label for="criticalityEdit" class="form-label fw-bold">Severidade</label>
+                            <select formControlName="severidade" class="form-select" id="criticalityEdit">
+                                <option value="Baixo">Baixo</option>
+                                <option value="Médio">Médio</option>
+                                <option value="Alto">Alto</option>
+                                <option value="Crítico">Crítico</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="statusEdit" class="form-label fw-bold">Status</label>
+                            <select formControlName="status" class="form-select" id="statusEdit">
+                                <option value="aberto">Aberto</option>
+                                <option value="em_progresso">Em progresso</option>
+                                <option value="resolvido">Resolvido</option>
+                                <option value="fechado">Fechado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary px-5 mt-3" (click)="updateAndCloseModal()">
+                        Atualizar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Título</th>
+                <th scope="col">Projeto</th>
+                <th scope="col">Desenvolvedor</th>
+                <th scope="col">Severidade</th>
+                <th scope="col">Status</th>
+                <th scope="col">Alterar</th>
+                <th scope="col">Remover</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let n of filteredbugs">
+                <th scope="row">{{n.titulo}}</th>
+                <td>{{n.projeto}}</td>
+                <td>{{n.desenvolvedorResponsavel}}</td>
+                <td>{{n.severidade}}</td>
+                <td>{{n.status}}</td>
+                <td>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#UpdateModal" (click)="onClickUpdate(n)">
+                        Alterar
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" (click)="delete(n)">
+                        Remover
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal de detalhes -->
+    <div class="modal fade" id="heroModal" tabindex="-1" aria-labelledby="heroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content p-0 border-0 shadow-lg rounded-4">
+                <div class="modal-body p-0 position-relative">
+                    <button
+                        type="button"
+                        class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 rounded-3">
+                        <div class="p-3 p-lg-5 pt-lg-3 w-100">
+                            <h1 class="fw-bold text-body-emphasis mb-5 text-center" *ngIf="bug">
+                                Informação completa: {{bug.titulo}}
+                            </h1>
+                            <div class="list-group gap-2 row" *ngIf="bug">
+                                <div class="row">
+                                    <div class="list-group-item rounded-3 py-3 fw-bold col-3 mx-auto">
+                                        Título
+                                        <span class="d-block small opacity-50">{{bug.titulo}}</span>
+                                    </div>
+                                    <div class="list-group-item rounded-3 py-3 fw-bold col-3 mx-auto">
+                                        Projeto
+                                        <span class="d-block small opacity-50">{{bug.projeto}}</span>
+                                    </div>
+                                    <div class="list-group-item rounded-3 py-3 fw-bold col-3 mx-auto">
+                                        Tipo
+                                        <span class="d-block small opacity-50">{{bug.tipo}}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="list-group-item rounded-3 py-3 disabled fw-bold col-3 mx-auto">
+                                        Desenvolvedor
+                                        <span class="d-block small opacity-50">{{bug.desenvolvedorResponsavel}}</span>
+                                    </div>
+                                    <div class="list-group-item rounded-3 py-3 disabled fw-bold col-3 mx-auto">
+                                        Severidade
+                                        <span class="d-block small opacity-50">{{bug.severidade}}</span>
+                                    </div>
+                                    <div class="list-group-item rounded-3 py-3 disabled fw-bold col-3 mx-auto">
+                                        Data
+                                        <span class="d-block small opacity-50">{{bug.dataIdentificacao}}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="list-group-item rounded-3 py-3 disabled fw-bold col-3 mx-auto">
+                                        Status
+                                        <span class="d-block small opacity-50">{{bug.status}}</span>
+                                    </div>
+                                    <div class="list-group-item rounded-3 py-3 disabled fw-bold col-3 mx-auto">
+                                        Descrição
+                                        <span class="d-block small opacity-50">{{bug.descricao}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Modal de Bugs -->
+    <div class="modal fade" id="BugModal" tabindex="-1" aria-labelledby="BugModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content p-4 text-muted bg-body border border-dashed rounded-5">
+                <button
+                    type="button"
+                    class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+                <h1 class="text-body-emphasis mb-4 text-center">Cadastre o seu Bug!</h1>
+                <div class="row">
+                    <div class="col-7 m-auto">
+                        <div *ngIf="mensagem" class="alert alert-success mt-5 text-center fw-bold">
+                              {{ mensagem }}
+                        </div>
+                        <div *ngIf="mensagemError" class="alert alert-danger mt-5 text-center fw-bold">
+                            {{ mensagemError }}
+                        </div>
+                        <form [formGroup]="formGroupbug" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="mb-3 col-6">
+                                    <label for="inputTitle" class="form-label fw-bold">Título</label>
+                                    <input formControlName="titulo" type="text" class="form-control" id="inputTitle" aria-describedby="titleHelp" required
+                                        [ngClass]="{'is-invalid': submitted && formGroupbug.get('titulo')?.invalid}">
+                                    <div *ngIf="submitted && formGroupbug.get('titulo')?.invalid" class="invalid-feedback">
+                                        Título é obrigatório.
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="project" class="form-label fw-bold">Projeto</label>
+                                    <select formControlName="projeto" class="form-select" id="project">
+                                        <option value="Projeto GEA">Projeto GEA</option>
+                                        <option value="Projeto NetBeans">Projeto NetBeans</option>
+                                        <option value="Projeto NoSQL">Projeto NoSQL</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-12">
+                                    <label for="description" class="form-label fw-bold">Descrição</label>
+                                    <input formControlName="descricao" type="text" class="form-control" id="description" aria-describedby="descriptionHelp">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-6">
+                                    <label for="type" class="form-label fw-bold">Tipo</label>
+                                    <input formControlName="tipo" type="text" class="form-control" id="type" aria-describedby="typeHelp" required
+                                        [ngClass]="{'is-invalid': submitted && formGroupbug.get('tipo')?.invalid}">
+                                    <div *ngIf="submitted && formGroupbug.get('tipo')?.invalid" class="invalid-feedback">
+                                        Tipo é obrigatório.
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-6">
+                                    <label for="date" class="form-label fw-bold">Data de identificação</label>
+                                    <input formControlName="dataIdentificacao" type="text" mask="00/00/0000" placeholder="__/__/____" class="form-control" id="date" aria-describedby="dateHelp">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-4">
+                                    <label for="developer" class="form-label fw-bold">Desenvolvedor</label>
+                                    <select formControlName="desenvolvedorResponsavel" class="form-select" id="developer">
+                                        <option value="">Selecione</option>
+                                        <option *ngFor="let dev of developers" [value]="dev.nome">{{dev.nome}}</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-4">
+                                    <label for="criticality" class="form-label fw-bold">Severidade</label>
+                                    <select formControlName="severidade" class="form-select" id="criticality">
+                                        <option value="baixo">Baixo</option>
+                                        <option value="medio">Médio</option>
+                                        <option value="alto">Alto</option>
+                                        <option value="critico">Crítico</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-4">
+                                    <label for="status" class="form-label fw-bold">Status</label>
+                                    <select formControlName="status" class="form-select" id="status">
+                                        <option value="aberto">Aberto</option>
+                                        <option value="em_progresso">Em progresso</option>
+                                        <option value="resolvido">Resolvido</option>
+                                        <option value="fechado">Fechado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button class="btn btn-danger col-3" (click)="clear()" data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
+                                <button class="btn btn-primary col-3" type="button" (click)="save()" data-bs-dismiss="modal">
+                                    Salvar
+                                </button>
+                            </div>              
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
