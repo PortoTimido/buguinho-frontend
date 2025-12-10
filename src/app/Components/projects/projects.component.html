@@ -1,0 +1,179 @@
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+  <h2 class="text-center fw-bold text-body-emphasis">Lista de projetos</h2>
+
+  <div class="row mt-5 mb-5 align-items-center">
+    <div class="col-3">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterProjects()" placeholder="Buscar por nome" class="form-control">
+    </div>
+    <div class="col-3">
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="filterProjects()" class="form-select">
+        <option value="">Todos os status</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="concluido">Concluído</option>
+        <option value="suspenso">Suspenso</option>
+      </select>
+    </div>
+    <div class="col d-flex justify-content-md-end">
+      <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#ProjectModal" (click)="clear()">
+        + Novo projeto
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mensagem" class="alert alert-success mt-3 text-center fw-bold">{{ mensagem }}</div>
+  <div *ngIf="mensagemError" class="alert alert-danger mt-3 text-center fw-bold">{{ mensagemError }}</div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Projeto</th>
+        <th scope="col">Status</th>
+        <th scope="col">Data criação</th>
+        <th scope="col">Data fim</th>
+        <th scope="col">Alterar</th>
+        <th scope="col">Remover</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of filteredProjects">
+        <th scope="row">{{ p.nomeProjeto }}</th>
+        <td>{{ p.status }}</td>
+        <td>{{ p.dataCriacao }}</td>
+        <td>{{ p.dataFim }}</td>
+        <td>
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#UpdateModal" (click)="onClickUpdate(p)">
+            Alterar
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-danger" (click)="delete(p)">
+            Remover
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="ProjectModal" tabindex="-1" aria-labelledby="ProjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content p-4 text-muted bg-body border border-dashed rounded-5">
+      <button
+        type="button"
+        class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+        data-bs-dismiss="modal"
+        aria-label="Close">
+      </button>
+      <h1 class="fw-bold text-body-emphasis mb-4 text-center">Cadastre o projeto!</h1>
+
+      <div class="row">
+        <div class="col-10 m-auto">
+          <form [formGroup]="formGroupProject" class="needs-validation" novalidate>
+            <div class="row">
+              <div class="mb-3 col-6">
+                <label for="inputName" class="form-label fw-bold">Nome</label>
+                <input formControlName="nomeProjeto" type="text" class="form-control" id="inputName" required
+                  [ngClass]="{'is-invalid': submitted && formGroupProject.get('nomeProjeto')?.invalid}">
+                <div *ngIf="submitted && formGroupProject.get('nomeProjeto')?.invalid" class="invalid-feedback">
+                  Nome é obrigatório.
+                </div>
+              </div>
+              <div class="mb-3 col-6">
+                <label for="status" class="form-label fw-bold">Status</label>
+                <select formControlName="status" class="form-select" id="status" required
+                  [ngClass]="{'is-invalid': submitted && formGroupProject.get('status')?.invalid}">
+                  <option value="">Selecione</option>
+                  <option value="planejado">Planejado</option>
+                  <option value="em_andamento">Em andamento</option>
+                  <option value="concluido">Concluído</option>
+                  <option value="suspenso">Suspenso</option>
+                </select>
+                <div *ngIf="submitted && formGroupProject.get('status')?.invalid" class="invalid-feedback">
+                  Status é obrigatório.
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-12">
+                <label for="description" class="form-label fw-bold">Descrição</label>
+                <input formControlName="descricao" type="text" class="form-control" id="description">
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-6">
+                <label for="dateStart" class="form-label fw-bold">Data de criação</label>
+                <input formControlName="dataCriacao" type="text" mask="00/00/0000" placeholder="__/__/____" class="form-control" id="dateStart">
+              </div>
+              <div class="mb-3 col-6">
+                <label for="dateEnd" class="form-label fw-bold">Data de fim</label>
+                <input formControlName="dataFim" type="text" mask="00/00/0000" placeholder="__/__/____" class="form-control" id="dateEnd">
+              </div>
+            </div>
+            <div class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+              <button class="btn btn-danger col-3" (click)="clear()" data-bs-dismiss="modal">
+                Cancelar
+              </button>
+              <button class="btn btn-primary col-3" type="button" (click)="save()" data-bs-dismiss="modal">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="UpdateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content p-4 text-muted bg-body border border-dashed rounded-5">
+      <button
+        type="button"
+        class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+        data-bs-dismiss="modal"
+        aria-label="Close">
+      </button>
+      <h1 class="text-body-emphasis mb-5 text-center">Alteração</h1>
+      <form [formGroup]="formGroupProject" class="needs-validation" novalidate>
+        <div class="row col-10 m-auto" *ngIf="isEditing">
+          <div class="mb-3 col-6">
+            <label for="inputNameEdit" class="form-label fw-bold">Nome</label>
+            <input formControlName="nomeProjeto" type="text" class="form-control" id="inputNameEdit" required
+              [ngClass]="{'is-invalid': submitted && formGroupProject.get('nomeProjeto')?.invalid}">
+          </div>
+          <div class="mb-3 col-6">
+            <label for="statusEdit" class="form-label fw-bold">Status</label>
+            <select formControlName="status" class="form-select" id="statusEdit" required
+              [ngClass]="{'is-invalid': submitted && formGroupProject.get('status')?.invalid}">
+              <option value="">Selecione</option>
+              <option value="planejado">Planejado</option>
+              <option value="em_andamento">Em andamento</option>
+              <option value="concluido">Concluído</option>
+              <option value="suspenso">Suspenso</option>
+            </select>
+          </div>
+          <div class="mb-3 col-12">
+            <label for="descriptionEdit" class="form-label fw-bold">Descrição</label>
+            <input formControlName="descricao" type="text" class="form-control" id="descriptionEdit">
+          </div>
+          <div class="mb-3 col-6">
+            <label for="dateStartEdit" class="form-label fw-bold">Data de criação</label>
+            <input formControlName="dataCriacao" type="text" mask="00/00/0000" placeholder="__/__/____" class="form-control" id="dateStartEdit">
+          </div>
+          <div class="mb-3 col-6">
+            <label for="dateEndEdit" class="form-label fw-bold">Data de fim</label>
+            <input formControlName="dataFim" type="text" mask="00/00/0000" placeholder="__/__/____" class="form-control" id="dateEndEdit">
+          </div>
+          <div class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-danger col-3" (click)="clear()" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button class="btn btn-primary col-3" type="button" (click)="update()">
+              Atualizar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

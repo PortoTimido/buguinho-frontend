@@ -12,6 +12,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BugsComponent } from './Components/bugs/bugs.component';
 import { HomeComponent } from './Components/home/home.component';
+import { ProjectsComponent } from './Components/projects/projects.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { HomeComponent } from './Components/home/home.component';
     AboutComponent,
     DeveloperComponent,
     BugsComponent,
-    HomeComponent
+    HomeComponent,
+    ProjectsComponent
   ],
   imports: [
     BrowserModule,
