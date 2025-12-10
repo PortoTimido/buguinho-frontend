@@ -1,0 +1,44 @@
+.bg-sidebar {
+    background-color: #AAED7F;
+    color: #244C4E;
+}
+
+.text:hover {
+    font-weight: bold;
+}
+
+.bg-active {
+    background-color: #F6F8FA;
+}
+
+.font {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #244C4E
+}
+
+.text1 {
+    color: #AAED7F;
+}
+
+.sidebar-full {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1030;
+}
+
+.with-sidebar {
+    margin-left: 280px; 
+}
+
+
+.sidebar-top-footer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1020; 
+    padding: 0.4rem 0;
+}
