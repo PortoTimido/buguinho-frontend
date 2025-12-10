@@ -6,19 +6,29 @@ import { AppComponent } from './app.component';
 import { SidebarComponent } from './Components/sidebar/sidebar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AboutComponent } from './Components/about/about.component';
+import { DeveloperComponent } from './Components/developer/developer.component';
+import { provideHttpClient } from '@angular/common/http';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    AboutComponent
+    AboutComponent,
+    DeveloperComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    ReactiveFormsModule,
+    FormsModule,
+    NgbModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
-  providers: [],
+  providers: [provideHttpClient(), provideNgxMask()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
