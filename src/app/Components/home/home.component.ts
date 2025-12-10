@@ -60,7 +60,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     if (!statusCtx) return;
     const statusLabels = ['Aberto', 'Em Progresso', 'Resolvido', 'Fechado'];
     const statusData = [stats.byStatus.aberto, stats.byStatus.emProgresso, stats.byStatus.resolvido, stats.byStatus.fechado];
-    const statusColors = ['#dc3545', '#ffc107', '#17a2b8', '#28a745'];
+    const statusColors = ['#ff0000ff', '#bd4708ff', '#1F8519', '#1586ffff'];
     this.statusChart = new Chart(statusCtx, {
       type: 'bar',
       data: {
@@ -95,7 +95,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     if (!severityCtx) return;
     const severityLabels = ['Crítico', 'Alta', 'Média', 'Baixa'];
     const severityData = [stats.bySeverity.critico, stats.bySeverity.alta, stats.bySeverity.media, stats.bySeverity.baixa];
-    const severityColors = ['#6f0000', '#dc3545', '#fd7e14', '#17a2b8'];
+    const severityColors = ['#ff0000ff', '#bd4708ff', '#1F8519', '#1586ffff'];
     this.severityChart = new Chart(severityCtx, {
       type: 'pie',
       data: {
