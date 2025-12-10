@@ -6,7 +6,7 @@
             <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterDevelopers()" placeholder="Buscar..." class="form-control">
         </div>
         <div class="col-3">
-            <select [(ngModel)]="selectedCargo" class="form-select">
+            <select [(ngModel)]="selectedCargo" (ngModelChange)="filterDevelopers()" class="form-select">
                 <option value="">Selecione um cargo</option>
                 <option value="Desenvolvedor_FrontEnd">Desenvolvedor FrontEnd</option>
                 <option value="Desenvolvedor_BackEnd">Desenvolvedor BackEnd</option>

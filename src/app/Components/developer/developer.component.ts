@@ -55,7 +55,9 @@ export class DeveloperComponent implements OnInit {
     this.filteredDevelopers = this.developers.filter(d => {
       const safeName = (d.nome || '').toString().toLowerCase();
       const safeEmail = (d.email || '').toString().toLowerCase();
-      return safeName.includes(term) || safeEmail.includes(term);
+      const matchesSearch = safeName.includes(term) || safeEmail.includes(term);
+      const matchesCargo = !this.selectedCargo || d.cargo === this.selectedCargo;
+      return matchesSearch && matchesCargo;
     });
   }
 
