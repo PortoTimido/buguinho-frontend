@@ -3,7 +3,7 @@
 
     <div class="row mt-5 mb-5">
             <div class="col-3">
-            <input type="text" [(ngModel)]="searchTerm" [ngModelOptions]="{ standalone: true }" (ngModelChange)="filterbugs()" placeholder="Buscar..." class="form-control">
+            <input type="text" [(ngModel)]="searchTerm" [ngModelOptions]="{ standalone: true }" (ngModelChange)="filterbugs()" placeholder="Buscar por nome" class="form-control">
         </div>
         <div class="col-3">
             <select [(ngModel)]="selectedCategory" [ngModelOptions]="{ standalone: true }" (ngModelChange)="filterbugs()" class="form-select">
@@ -44,7 +44,10 @@
                         </div>
                         <div class="mb-3 col-6">
                             <label for="projectEdit" class="form-label fw-bold">Projeto</label>
-                            <input formControlName="projeto" type="text" class="form-control" id="projectEdit">
+                            <select formControlName="projeto" class="form-select" id="projectEdit">
+                                <option value="">Selecione</option>
+                                <option *ngFor="let proj of projects" [value]="proj.nomeProjeto">{{proj.nomeProjeto}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -74,6 +77,7 @@
                             <div class="mb-3 col-6">
                             <label for="criticalityEdit" class="form-label fw-bold">Severidade</label>
                             <select formControlName="severidade" class="form-select" id="criticalityEdit">
+                                <option value="">Selecione</option>
                                 <option value="Baixo">Baixo</option>
                                 <option value="Médio">Médio</option>
                                 <option value="Alto">Alto</option>
@@ -83,10 +87,11 @@
                         <div class="mb-3 col-6">
                             <label for="statusEdit" class="form-label fw-bold">Status</label>
                             <select formControlName="status" class="form-select" id="statusEdit">
-                                <option value="aberto">Aberto</option>
-                                <option value="em_progresso">Em progresso</option>
-                                <option value="resolvido">Resolvido</option>
-                                <option value="fechado">Fechado</option>
+                                <option value="">Selecione</option>
+                                <option value="Aberto">Aberto</option>
+                                <option value="Em progresso">Em progresso</option>
+                                <option value="Resolvido">Resolvido</option>
+                                <option value="Fechado">Fechado</option>
                             </select>
                         </div>
                     </div>
@@ -225,9 +230,8 @@
                                 <div class="mb-3 col-6">
                                     <label for="project" class="form-label fw-bold">Projeto</label>
                                     <select formControlName="projeto" class="form-select" id="project">
-                                        <option value="Projeto GEA">Projeto GEA</option>
-                                        <option value="Projeto NetBeans">Projeto NetBeans</option>
-                                        <option value="Projeto NoSQL">Projeto NoSQL</option>
+                                        <option value="">Selecione</option>
+                                        <option *ngFor="let proj of projects" [value]="proj.nomeProjeto">{{proj.nomeProjeto}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -262,6 +266,7 @@
                                 <div class="mb-3 col-4">
                                     <label for="criticality" class="form-label fw-bold">Severidade</label>
                                     <select formControlName="severidade" class="form-select" id="criticality">
+                                        <option value="">Selecione</option>
                                         <option value="baixo">Baixo</option>
                                         <option value="medio">Médio</option>
                                         <option value="alto">Alto</option>
@@ -271,10 +276,11 @@
                                 <div class="mb-3 col-4">
                                     <label for="status" class="form-label fw-bold">Status</label>
                                     <select formControlName="status" class="form-select" id="status">
-                                        <option value="aberto">Aberto</option>
-                                        <option value="em_progresso">Em progresso</option>
-                                        <option value="resolvido">Resolvido</option>
-                                        <option value="fechado">Fechado</option>
+                                        <option value="">Selecione</option>
+                                        <option value="Aberto">Aberto</option>
+                                        <option value="Em Progresso">Em progresso</option>
+                                        <option value="Resolvido">Resolvido</option>
+                                        <option value="Fechado">Fechado</option>
                                     </select>
                                 </div>
                             </div>

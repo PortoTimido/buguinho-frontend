@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BugService } from '../../Services/bug.service';
 import { devField } from '../../Interfaces/devField';
 import { DeveloperService } from '../../Services/developer.service';
+import { ProjectService } from '../../Services/project.service';
+import { projetoField } from '../../Interfaces/projectField';
 
 @Component({
   selector: 'app-bugs',
@@ -31,11 +33,13 @@ export class BugsComponent implements OnInit {
   };
 
   developers: devField[] = [];
+  projects: projetoField[] = [];
 
   constructor(
               private bugService: BugService,
               private formBuilder: FormBuilder,
-              private developerService: DeveloperService
+              private developerService: DeveloperService,
+              private projectService: ProjectService
   ) { 
     this.formGroupbug = formBuilder.group({        
       id: [''],
@@ -54,6 +58,7 @@ export class BugsComponent implements OnInit {
   ngOnInit(): void {
     this.loadbugs();
     this.loadDevelopers();
+    this.loadProjects();
 
     this.formGroupbug.get('titulo')?.valueChanges?.subscribe(() => {
       this.filterbugs();
@@ -85,6 +90,13 @@ export class BugsComponent implements OnInit {
     this.developerService.getAll().subscribe({
       next: (json) => { this.developers = json || []; },
       error: () => { this.developers = []; }
+    });
+  }
+
+  loadProjects(): void {
+    this.projectService.getAll().subscribe({
+      next: (json) => { this.projects = json || []; },
+      error: () => { this.projects = []; }
     });
   }
 

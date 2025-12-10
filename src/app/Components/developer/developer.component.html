@@ -3,15 +3,15 @@
 
     <div class="row mt-5 mb-5 align-items-center">
         <div class="col-3">
-            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterDevelopers()" placeholder="Buscar..." class="form-control">
+            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterDevelopers()" placeholder="Buscar por nome" class="form-control">
         </div>
         <div class="col-3">
             <select [(ngModel)]="selectedCargo" (ngModelChange)="filterDevelopers()" class="form-select">
                 <option value="">Selecione um cargo</option>
-                <option value="Desenvolvedor_FrontEnd">Desenvolvedor FrontEnd</option>
-                <option value="Desenvolvedor_BackEnd">Desenvolvedor BackEnd</option>
+                <option value="Desenvolvedor FrontEnd">Desenvolvedor FrontEnd</option>
+                <option value="Desenvolvedor BackEnd">Desenvolvedor BackEnd</option>
                 <option value="Testador">Testador</option>
-                <option value="Dba">DBA</option>
+                <option value="DBA">DBA</option>
             </select>
         </div>
         <div class="col d-flex justify-content-md-end">
@@ -100,10 +100,10 @@
                                 <select formControlName="cargo" class="form-select" id="cargo" required
                                     [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('cargo')?.invalid}">
                                     <option value="">Selecione um cargo</option>
-                                    <option value="Desenvolvedor_FrontEnd">Desenvolvedor FrontEnd</option>
-                                    <option value="Desenvolvedor_BackEnd">Desenvolvedor BackEnd</option>
+                                    <option value="Desenvolvedor FrontEnd">Desenvolvedor FrontEnd</option>
+                                    <option value="Desenvolvedor BackEnd">Desenvolvedor BackEnd</option>
                                     <option value="Testador">Testador</option>
-                                    <option value="Dba">DBA</option>
+                                    <option value="DBA">DBA</option>
                                 </select>
                                 <div *ngIf="submitted && formGroupDeveloper.get('cargo')?.invalid" class="invalid-feedback">
                                     Cargo é obrigatório.
@@ -156,10 +156,10 @@
                         <select formControlName="cargo" class="form-select" id="cargoEdit" required
                             [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('cargo')?.invalid}">
                             <option value="">Selecione um cargo</option>
-                            <option value="Desenvolvedor_FrontEnd">Desenvolvedor FrontEnd</option>
-                            <option value="Desenvolvedor_BackEnd">Desenvolvedor BackEnd</option>
+                            <option value="Desenvolvedor FrontEnd">Desenvolvedor FrontEnd</option>
+                            <option value="Desenvolvedor BackEnd">Desenvolvedor BackEnd</option>
                             <option value="Testador">Testador</option>
-                            <option value="Dba">DBA</option>
+                            <option value="DBA">DBA</option>
                         </select>
                         <div *ngIf="submitted && formGroupDeveloper.get('cargo')?.invalid" class="invalid-feedback">
                             Cargo é obrigatório.
