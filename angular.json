@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "buguinho-frontend": {
+    "Buguinho": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/buguinho-frontend",
+            "outputPath": "dist/buguinho",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -41,7 +41,9 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -71,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "buguinho-frontend:build:production"
+              "buildTarget": "Buguinho:build:production"
             },
             "development": {
-              "buildTarget": "buguinho-frontend:build:development"
+              "buildTarget": "Buguinho:build:development"
             }
           },
           "defaultConfiguration": "development"
