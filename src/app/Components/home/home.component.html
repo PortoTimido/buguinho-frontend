@@ -1,0 +1,36 @@
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold text-body-emphasis">Bem-vindo ao Buguinho!</h1>
+    <div class="col-lg-6 mx-auto">
+    <p class="lead mb-5">O Buguinho é um sistema simples e eficiente para gerenciamento de bugs. Com ele, você pode cadastrar, visualizar, editar e excluir problemas no seu sistema de forma rápida, mantendo seu projeto sempre organizado e atualizado.</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <button type="button" class="btn btn-custom btn-lg px-4 gap-3" routerLink="/bugs">☉ Ver todos os bugs</button>
+        <button type="button" class="btn btn-outline-secondary btn-lg px-4" routerLink="/developer">+ Novo desenvolvedor</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <h2 class="mb-3">Dashboard</h2>
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card p-3">
+          <h5 class="card-title">Bugs por Desenvolvedor</h5>
+          <canvas #developerChart></canvas>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card p-3">
+          <h5 class="card-title">Bugs por Severidade</h5>
+          <canvas #severityChart></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mb-4">
+        <div class="card p-3">
+          <h5 class="card-title">Bugs por Status</h5>
+          <canvas #statusChart></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
