@@ -62,7 +62,7 @@ export class DeveloperComponent implements OnInit {
   }
 
   delete(developer: devField) {
-    const confirmar = confirm(`Tem certeza que deseja excluir o desenvolvedor com id "${developer.id}"?`);
+    const confirmar = confirm(`Tem certeza que deseja excluir o desenvolvedor "${developer.nome}"?`);
     if (confirmar) {
       this.developerService.delete(developer).subscribe({
         next: () => this.loaddevelopers()

@@ -25,12 +25,6 @@ export class BugsComponent implements OnInit {
   submitted = false;
   mensagemError: string = '';
 
-  bugStatistics = {
-    total: 0,
-    bySeverity: { alta: 0, media: 0, baixa: 0 },
-    byStatus: { aberto: 0, emProgresso: 0, fechado: 0 },
-    byDeveloper: {} as { [key: string]: number }
-  };
 
   developers: devField[] = [];
   projects: projetoField[] = [];
@@ -77,7 +71,6 @@ export class BugsComponent implements OnInit {
     this.bugService.getAll().subscribe({
       next: (json) => { 
         this.bugs = json;
-        this.calculateBugStatistics();
         this.filterbugs();
       },
       error: () => {
@@ -100,14 +93,16 @@ export class BugsComponent implements OnInit {
     });
   }
 
+  /*
   selectById(bug: bugField) {
     this.bugService.selectById(bug).subscribe({
       next: (json) => { this.bug = json; }
     })
   }
+  */
 
   delete(bugs: bugField) {
-    const confirmar = confirm(`Tem certeza que deseja excluir o bug com id "${bugs.id}"?`);
+    const confirmar = confirm(`Tem certeza que deseja excluir o bug "${bugs.titulo}"?`);
     if (confirmar) {
       this.bugService.delete(bugs).subscribe({
         next: () => this.loadbugs()
@@ -199,55 +194,5 @@ export class BugsComponent implements OnInit {
 
       return matchesTerm && matchesDeveloper;
     });
-  }
-
-  public calculateAge(dateBorn: string): number {
-
-    if (!dateBorn) return 0;
-
-    let birthDate: Date | null = null;
-
-    if (/^\d{8}$/.test(dateBorn)) {
-      const day = parseInt(dateBorn.substring(0, 2), 10);
-      const month = parseInt(dateBorn.substring(2, 4), 10);
-      const year = parseInt(dateBorn.substring(4, 8), 10);
-      birthDate = new Date(year, month - 1, day);
-    }
-
-    if (!birthDate || isNaN(birthDate.getTime())) return 0;
-
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    return age;
-  }
-
-  calculateBugStatistics(): void {
-    this.bugStatistics = {
-      total: this.bugs.length,
-      bySeverity: { alta: 0, media: 0, baixa: 0 },
-      byStatus: { aberto: 0, emProgresso: 0, fechado: 0 },
-      byDeveloper: {}
-    };
-
-    this.bugs.forEach((bug: bugField) => {
-      const criticality = (bug.severidade || '').toLowerCase();
-      if (criticality.includes('alto') || criticality.includes('crit')) this.bugStatistics.bySeverity.alta++;
-      else if (criticality.includes('medio') || criticality.includes('médio') || criticality.includes('média')) this.bugStatistics.bySeverity.media++;
-      else this.bugStatistics.bySeverity.baixa++;
-
-      const status = (bug.status || '').toLowerCase();
-      if (status.includes('aberto')) this.bugStatistics.byStatus.aberto++;
-      else if (status.includes('progresso') || status.includes('em')) this.bugStatistics.byStatus.emProgresso++;
-      else this.bugStatistics.byStatus.fechado++;
-
-      const developer = bug.desenvolvedorResponsavel || 'Não atribuído';
-      this.bugStatistics.byDeveloper[developer] = (this.bugStatistics.byDeveloper[developer] || 0) + 1;
-    });
-  }
-  
+  } 
 }

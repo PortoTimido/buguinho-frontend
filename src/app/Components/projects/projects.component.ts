@@ -67,7 +67,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   delete(project: projetoField): void {
-    const confirmar = confirm(`Tem certeza que deseja excluir o projeto com id "${project.id}"?`);
+    const confirmar = confirm(`Tem certeza que deseja excluir o projeto "${project.nome}"?`);
     if (confirmar) {
       this.projectService.delete(project).subscribe({
         next: () => this.loadProjects()
@@ -133,9 +133,8 @@ export class ProjectsComponent implements OnInit {
 
   formatDate(date: string): string {
     if (!date) return '';
-    // Remove qualquer caractere que não seja número
     const cleaned = date.replace(/\D/g, '');
-    // Aplica a máscara dd/MM/yyyy
+
     if (cleaned.length >= 8) {
       return `${cleaned.substring(0, 2)}/${cleaned.substring(2, 4)}/${cleaned.substring(4, 8)}`;
     }

@@ -26,13 +26,13 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.bugService.getAll().subscribe({
-      next: (contacts: bugField[]) => this.initCharts(contacts),
+      next: (bugs: bugField[]) => this.initCharts(bugs),
       error: () => this.initCharts([])
     });
   }
 
-  private initCharts(contacts: bugField[]): void {
-    const stats = this.calculateBugStatistics(contacts);
+  private initCharts(bugs: bugField[]): void {
+    const stats = this.calculateBugStatistics(bugs);
 
     const devCtx = this.developerRef.nativeElement.getContext('2d');
     if (!devCtx) return;
@@ -154,26 +154,26 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private calculateBugStatistics(contacts: bugField[]) {
+  private calculateBugStatistics(bugs: bugField[]) {
     const result = {
-      total: contacts.length,
+      total: bugs.length,
       bySeverity: { critico: 0, alta: 0, media: 0, baixa: 0 },
       byStatus: { aberto: 0, emProgresso: 0, resolvido: 0, fechado: 0 },
       byDeveloper: {} as { [key: string]: number },
       byProject: {} as { [key: string]: number }
     };
 
-    contacts.forEach((bug: bugField) => {
+    bugs.forEach((bug: bugField) => {
       const criticality = (bug.severidade || '').toLowerCase();
-      if (criticality.includes('crit') || criticality.includes('crítico')) result.bySeverity.critico++;
-      else if (criticality.includes('alto') || criticality.includes('alta')) result.bySeverity.alta++;
-      else if (criticality.includes('medio') || criticality.includes('médio') || criticality.includes('média')) result.bySeverity.media++;
+      if (criticality.includes('crítico')) result.bySeverity.critico++;
+      else if (criticality.includes('alto')) result.bySeverity.alta++;
+      else if (criticality.includes('médio')) result.bySeverity.media++;
       else result.bySeverity.baixa++;
 
       const status = (bug.status || '').toLowerCase();
       if (status.includes('aberto')) result.byStatus.aberto++;
-      else if (status.includes('progresso') || status.includes('em')) result.byStatus.emProgresso++;
-      else if (status.includes('resolvido') || status.includes('resolve')) result.byStatus.resolvido++;
+      else if (status.includes('em progresso')) result.byStatus.emProgresso++;
+      else if (status.includes('resolvido')) result.byStatus.resolvido++;
       else result.byStatus.fechado++;
 
       const dev = bug.desenvolvedorResponsavel || 'Não atribuído';
