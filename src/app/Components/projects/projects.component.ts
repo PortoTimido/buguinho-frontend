@@ -130,4 +130,15 @@ export class ProjectsComponent implements OnInit {
     this.submitted = false;
     this.formGroupProject.reset();
   }
+
+  formatDate(date: string): string {
+    if (!date) return '';
+    // Remove qualquer caractere que não seja número
+    const cleaned = date.replace(/\D/g, '');
+    // Aplica a máscara dd/MM/yyyy
+    if (cleaned.length >= 8) {
+      return `${cleaned.substring(0, 2)}/${cleaned.substring(2, 4)}/${cleaned.substring(4, 8)}`;
+    }
+    return date;
+  }
 }
