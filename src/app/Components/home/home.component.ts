@@ -13,10 +13,12 @@ Chart.register(...registerables);
 })
 export class HomeComponent implements AfterViewInit, OnDestroy {
   @ViewChild('developerChart', { static: false }) developerRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('projectChart', { static: false }) projectRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('statusChart', { static: false }) statusRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('severityChart', { static: false }) severityRef!: ElementRef<HTMLCanvasElement>;
 
   private developerChart: any;
+  private projectChart: any;
   private statusChart: any;
   private severityChart: any;
 
@@ -54,6 +56,41 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
           }
         }
       }
+    });
+
+    const projectCtx = this.projectRef.nativeElement.getContext('2d');
+    if (!projectCtx) return;
+    const projectLabels = Object.keys(stats.byProject);
+    const projectData = projectLabels.map(l => stats.byProject[l]);
+    const projectColors = ['#ff0000ff', '#bd4708ff', '#1F8519', '#1586ffff'];
+    this.projectChart = new Chart(projectCtx, {
+      type: 'bar',
+      data: {
+        labels: projectLabels,
+        datasets: [{ 
+          label: 'Quantidade',
+          data: projectData, 
+          backgroundColor: projectColors
+        }]
+      },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
     });
 
     const statusCtx = this.statusRef.nativeElement.getContext('2d');
@@ -122,7 +159,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       total: contacts.length,
       bySeverity: { critico: 0, alta: 0, media: 0, baixa: 0 },
       byStatus: { aberto: 0, emProgresso: 0, resolvido: 0, fechado: 0 },
-      byDeveloper: {} as { [key: string]: number }
+      byDeveloper: {} as { [key: string]: number },
+      byProject: {} as { [key: string]: number }
     };
 
     contacts.forEach((bug: bugField) => {
@@ -140,6 +178,9 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
       const dev = bug.desenvolvedorResponsavel || 'Não atribuído';
       result.byDeveloper[dev] = (result.byDeveloper[dev] || 0) + 1;
+
+      const project = bug.projeto || 'Não atribuído';
+      result.byProject[project] = (result.byProject[project] || 0) + 1;
     });
 
     return result;
@@ -154,6 +195,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     try { this.developerChart?.destroy(); } catch {}
+    try { this.projectChart?.destroy(); } catch {}
     try { this.statusChart?.destroy(); } catch {}
     try { this.severityChart?.destroy(); } catch {}
   }
