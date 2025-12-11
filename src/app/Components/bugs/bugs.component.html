@@ -24,20 +24,20 @@
 
     <!-- Modal de atualização -->
     <div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="UpdateModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content p-5 text-center text-muted bg-body border border-dashed rounded-5">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content p-4 text-muted bg-body border border-dashed rounded-5">
                 <button
                     type="button"
                     class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
                     data-bs-dismiss="modal"
                     aria-label="Close">
                 </button>
-                <h1 class="text-body-emphasis mb-5">Alteração</h1>
+                <h1 class="text-body-emphasis mb-5 text-center">Alteração</h1>
 
                 <!-- FORMULÁRIO -->
                 <form [formGroup]="formGroupbug" class="needs-validation" novalidate>
                     <div class="row" *ngIf="isEditing">
-                            <div class="mb-3 col-6">
+                        <div class="mb-3 col-6">
                             <label for="inputTitleEdit" class="form-label fw-bold">Título</label>
                             <input formControlName="titulo" type="text" class="form-control" id="inputTitleEdit" aria-describedby="titleHelp" required
                                 [ngClass]="{'is-invalid': submitted && formGroupbug.get('titulo')?.invalid}">
@@ -46,7 +46,7 @@
                             <label for="projectEdit" class="form-label fw-bold">Projeto</label>
                             <select formControlName="projeto" class="form-select" id="projectEdit">
                                 <option value="">Selecione</option>
-                                <option *ngFor="let proj of projects" [value]="proj.nomeProjeto">{{proj.nomeProjeto}}</option>
+                                <option *ngFor="let proj of projects" [value]="proj.nome">{{proj.nome}}</option>
                             </select>
                         </div>
                     </div>
@@ -94,10 +94,15 @@
                                 <option value="Fechado">Fechado</option>
                             </select>
                         </div>
+                        <div class="row mt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-danger col-3" (click)="clear()" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary col-3" type="button" data-bs-dismiss="modal" (click)="updateAndCloseModal()">
+                                Atualizar
+                            </button>
+                        </div>
                     </div>
-                    <button class="btn btn-primary px-5 mt-3" (click)="updateAndCloseModal()">
-                        Atualizar
-                    </button>
                 </form>
             </div>
         </div>
@@ -231,7 +236,7 @@
                                     <label for="project" class="form-label fw-bold">Projeto</label>
                                     <select formControlName="projeto" class="form-select" id="project">
                                         <option value="">Selecione</option>
-                                        <option *ngFor="let proj of projects" [value]="proj.nomeProjeto">{{proj.nomeProjeto}}</option>
+                                        <option *ngFor="let proj of projects" [value]="proj.nome">{{proj.nome}}</option>
                                     </select>
                                 </div>
                             </div>
