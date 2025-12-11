@@ -1,6 +1,6 @@
 export interface projetoField {
     id: string,
-    nomeProjeto: string,
+    nome: string,
     descricao: string,
     status: string,
     dataCriacao: string,

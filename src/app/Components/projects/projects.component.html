@@ -36,10 +36,10 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of filteredProjects">
-        <th scope="row">{{ p.nomeProjeto }}</th>
+        <th scope="row">{{ p.nome }}</th>
         <td>{{ p.status }}</td>
-        <td>{{ p.dataCriacao }}</td>
-        <td>{{ p.dataFim }}</td>
+        <td>{{ p.dataCriacao | date:'dd/MM/yyyy' }}</td>
+        <td>{{ p.dataFim | date:'dd/MM/yyyy' }}</td>
         <td>
           <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#UpdateModal" (click)="onClickUpdate(p)">
             Alterar
@@ -71,10 +71,10 @@
           <form [formGroup]="formGroupProject" class="needs-validation" novalidate>
             <div class="row">
               <div class="mb-3 col-6">
-                <label for="inputName" class="form-label fw-bold">Nome</label>
-                <input formControlName="nomeProjeto" type="text" class="form-control" id="inputName" required
-                  [ngClass]="{'is-invalid': submitted && formGroupProject.get('nomeProjeto')?.invalid}">
-                <div *ngIf="submitted && formGroupProject.get('nomeProjeto')?.invalid" class="invalid-feedback">
+                <label for="nome" class="form-label fw-bold">Nome</label>
+                <input formControlName="nome" type="text" class="form-control" id="nome" required
+                  [ngClass]="{'is-invalid': submitted && formGroupProject.get('nome')?.invalid}">
+                <div *ngIf="submitted && formGroupProject.get('nome')?.invalid" class="invalid-feedback">
                   Nome é obrigatório.
                 </div>
               </div>
@@ -137,9 +137,9 @@
       <form [formGroup]="formGroupProject" class="needs-validation" novalidate>
         <div class="row col-10 m-auto" *ngIf="isEditing">
           <div class="mb-3 col-6">
-            <label for="inputNameEdit" class="form-label fw-bold">Nome</label>
-            <input formControlName="nomeProjeto" type="text" class="form-control" id="inputNameEdit" required
-              [ngClass]="{'is-invalid': submitted && formGroupProject.get('nomeProjeto')?.invalid}">
+            <label for="nomeEdit" class="form-label fw-bold">Nome</label>
+            <input formControlName="nome" type="text" class="form-control" id="nomeEdit" required
+              [ngClass]="{'is-invalid': submitted && formGroupProject.get('nome')?.invalid}">
           </div>
           <div class="mb-3 col-6">
             <label for="statusEdit" class="form-label fw-bold">Status</label>
@@ -168,7 +168,7 @@
             <button class="btn btn-danger col-3" (click)="clear()" data-bs-dismiss="modal">
               Cancelar
             </button>
-            <button class="btn btn-primary col-3" type="button" (click)="update()">
+            <button class="btn btn-primary col-3" type="button" data-bs-dismiss="modal" (click)="update()">
               Atualizar
             </button>
           </div>

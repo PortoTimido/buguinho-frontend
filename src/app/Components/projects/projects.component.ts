@@ -27,7 +27,7 @@ export class ProjectsComponent implements OnInit {
   ) {
     this.formGroupProject = formBuilder.group({
       id: [''],
-      nomeProjeto: ['', Validators.required],
+      nome: ['', Validators.required],
       descricao: [''],
       status: ['', Validators.required],
       dataCriacao: [''],
@@ -37,7 +37,7 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProjects();
-    this.formGroupProject.get('nomeProjeto')?.valueChanges?.subscribe(() => {
+    this.formGroupProject.get('nome')?.valueChanges?.subscribe(() => {
       this.filterProjects();
     });
     this.formGroupProject.get('descricao')?.valueChanges?.subscribe(() => {
@@ -58,7 +58,7 @@ export class ProjectsComponent implements OnInit {
   filterProjects(): void {
     const term = (this.searchTerm || '').toLowerCase();
     this.filteredProjects = this.projects.filter(p => {
-      const safeName = (p.nomeProjeto || '').toString().toLowerCase();
+      const safeName = (p.nome || '').toString().toLowerCase();
       const safeDesc = (p.descricao || '').toString().toLowerCase();
       const matchesSearch = safeName.includes(term) || safeDesc.includes(term);
       const matchesStatus = !this.selectedStatus || p.status === this.selectedStatus;
