@@ -29,7 +29,7 @@ export class DeveloperComponent implements OnInit {
       id: [''],
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      cargo: ['', Validators.required]
+      cargo: [null, Validators.required]
     });
   }
 
@@ -87,6 +87,7 @@ export class DeveloperComponent implements OnInit {
       next: () => {
         this.loaddevelopers();
         this.clear();
+        this.hideModal('UpdateModal');
       },
       error: () => {
         this.mensagemError = 'Erro ao atualizar desenvolvedor.';
@@ -121,6 +122,17 @@ export class DeveloperComponent implements OnInit {
   clear() {
     this.isEditing = false;
     this.submitted = false;
-    this.formGroupDeveloper.reset();
+    this.formGroupDeveloper.reset({ id: '', nome: '', email: '', cargo: null });
+  }
+
+  private hideModal(modalId: string): void {
+    const modalElement = document.getElementById(modalId);
+    const bootstrap = (window as any).bootstrap;
+    if (!modalElement || !bootstrap?.Modal) {
+      return;
+    }
+
+    const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+    modalInstance.hide();
   }
 }

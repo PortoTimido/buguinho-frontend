@@ -7,7 +7,7 @@
         </div>
         <div class="col-3">
             <select [(ngModel)]="selectedCargo" (ngModelChange)="filterDevelopers()" class="form-select">
-                <option value="">Selecione um cargo</option>
+                <option value="">Todos os cargos</option>
                 <option value="Desenvolvedor FrontEnd">Desenvolvedor FrontEnd</option>
                 <option value="Desenvolvedor BackEnd">Desenvolvedor BackEnd</option>
                 <option value="Testador">Testador</option>
@@ -37,13 +37,13 @@
                 <td>{{d.email}}</td>
                 <td>{{d.cargo}}</td>
                 <td>
-                    <button class="btn btn-danger" (click)="delete(d)">
-                        Remover
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#UpdateModal" (click)="onClickUpdate(d)">
+                        Alterar
                     </button>
                 </td>
                 <td>
-                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#UpdateModal" (click)="onClickUpdate(d)">
-                        Alterar
+                    <button class="btn btn-danger" (click)="delete(d)">
+                        Remover
                     </button>
                 </td>
             </tr>
@@ -99,7 +99,7 @@
                                 <label for="cargo" class="form-label fw-bold">Cargo</label>
                                 <select formControlName="cargo" class="form-select" id="cargo" required
                                     [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('cargo')?.invalid}">
-                                    <option value="">Selecione um cargo</option>
+                                    <option [ngValue]="null">Selecione um cargo</option>
                                     <option value="Desenvolvedor FrontEnd">Desenvolvedor FrontEnd</option>
                                     <option value="Desenvolvedor BackEnd">Desenvolvedor BackEnd</option>
                                     <option value="Testador">Testador</option>
@@ -155,7 +155,7 @@
                         <label for="cargoEdit" class="form-label fw-bold">Cargo</label>
                         <select formControlName="cargo" class="form-select" id="cargoEdit" required
                             [ngClass]="{'is-invalid': submitted && formGroupDeveloper.get('cargo')?.invalid}">
-                            <option value="">Selecione um cargo</option>
+                            <option [ngValue]="null">Selecione um cargo</option>
                             <option value="Desenvolvedor FrontEnd">Desenvolvedor FrontEnd</option>
                             <option value="Desenvolvedor BackEnd">Desenvolvedor BackEnd</option>
                             <option value="Testador">Testador</option>

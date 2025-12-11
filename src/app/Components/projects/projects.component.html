@@ -9,8 +9,8 @@
       <select [(ngModel)]="selectedStatus" (ngModelChange)="filterProjects()" class="form-select">
         <option value="">Todos os status</option>
         <option value="Em andamento">Em andamento</option>
-        <option value="concluido">Concluído</option>
-        <option value="suspenso">Suspenso</option>
+        <option value="Concluído">Concluído</option>
+        <option value="Suspenso">Suspenso</option>
       </select>
     </div>
     <div class="col d-flex justify-content-md-end">
@@ -83,10 +83,10 @@
                 <select formControlName="status" class="form-select" id="status" required
                   [ngClass]="{'is-invalid': submitted && formGroupProject.get('status')?.invalid}">
                   <option value="">Selecione</option>
-                  <option value="planejado">Planejado</option>
-                  <option value="em_andamento">Em andamento</option>
-                  <option value="concluido">Concluído</option>
-                  <option value="suspenso">Suspenso</option>
+                  <option value="Planejado">Planejado</option>
+                  <option value="Em Andamento">Em andamento</option>
+                  <option value="Concluído">Concluído</option>
+                  <option value="Suspenso">Suspenso</option>
                 </select>
                 <div *ngIf="submitted && formGroupProject.get('status')?.invalid" class="invalid-feedback">
                   Status é obrigatório.
@@ -146,10 +146,10 @@
             <select formControlName="status" class="form-select" id="statusEdit" required
               [ngClass]="{'is-invalid': submitted && formGroupProject.get('status')?.invalid}">
               <option value="">Selecione</option>
-              <option value="planejado">Planejado</option>
-              <option value="em_andamento">Em andamento</option>
-              <option value="concluido">Concluído</option>
-              <option value="suspenso">Suspenso</option>
+              <option value="Planejado">Planejado</option>
+              <option value="Em Andamento">Em andamento</option>
+              <option value="Concluido">Concluído</option>
+              <option value="Suspenso">Suspenso</option>
             </select>
           </div>
           <div class="mb-3 col-12">
